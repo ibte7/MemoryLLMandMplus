@@ -1,6 +1,6 @@
 # MemoryLLM & M+
 
-This is the official implementation of paper **MemoryLLM: Towards Self-Updatable Large Language Models** and **M+: Extending MemoryLLM with Scalable Long-Term Memory**.
+This is a fork of the official implementation of paper **MemoryLLM: Towards Self-Updatable Large Language Models** and **M+: Extending MemoryLLM with Scalable Long-Term Memory** with additional files for paper reading demonstration and toy dataset end-to-end run as part of paper reading assignment of the course Foundations of Large Language Models.
 
 <p align="center" width="100%">
 <!-- put the image "memoryllm.png" -->
