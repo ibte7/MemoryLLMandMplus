@@ -538,7 +538,7 @@ class LlamaAttention(nn.Module):
         if not output_attentions:
             attn_weights = None
 
-        return attn_output, attn_weights, past_key_value, retriever_weights.mean(1) if retriever_weights is not None else None
+        return attn_output, attn_weights, past_key_value, (retriever_weights.mean(1) if retriever_weights is not None else None), None
 
 
 class LlamaFlashAttention2(LlamaAttention):
@@ -886,7 +886,7 @@ class LlamaSdpaAttention(LlamaAttention):
 
         attn_output = self.o_proj(attn_output)
 
-        return attn_output, None, past_key_value
+        return attn_output, None, past_key_value, None, None
 
 
 LLAMA_ATTENTION_CLASSES = {
@@ -2589,7 +2589,10 @@ class MPlus(LlamaForCausalLM):
                 indices = torch.sort(indices)[0].cpu()
 
         if self.cached_dropped_memories is None:
-            ages = self.ltm_ages[idx][indices.detach().cpu()]
+            if isinstance(self.ltm_ages[idx], torch.Tensor):
+                ages = self.ltm_ages[idx][indices.detach().cpu()].detach().cpu().numpy()
+            else:
+                ages = self.ltm_ages[idx][indices.detach().cpu().numpy()]
             indices = indices[np.argsort(ages)[::-1].copy()]
             x = self.ltm[idx][indices.detach().cpu()].to(hidden_states.device)
             return x.detach(), indices.detach().cpu()
